@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:recipebook/screens/Home.dart';
+import 'package:recipebook/screens/Intro.dart';
 import 'package:recipebook/screens/Profile.dart';
 import 'package:recipebook/screens/Search.dart';
+import 'package:after_layout/after_layout.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(MyApp());
@@ -15,10 +18,42 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.amber,
       ),
-      home: MainPage(),
+      home: Splash(),
     );
   }
 }
+
+class Splash extends StatefulWidget {
+  @override
+  _SplashState createState() => _SplashState();
+}
+
+class _SplashState extends State<Splash> with AfterLayoutMixin<Splash>{
+  Future checkFirstSeen() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool _seen = (prefs.getBool('seen') ?? false);
+
+    if(_seen) {
+      Navigator.of(context).pushReplacement(
+          new MaterialPageRoute(builder: (context) => new MainPage())
+      );
+    } else {
+      await prefs.setBool('seen', true);
+      Navigator.of(context).pushReplacement(
+          new MaterialPageRoute(builder: (context) => new IntroScreen())
+      );
+    }
+  }
+
+  @override
+  void afterFirstLayout(BuildContext context) => checkFirstSeen();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(body: Center(child: CircularProgressIndicator()));
+  }
+}
+
 
 class MainPage extends StatefulWidget {
   MainPage({Key? key}) : super(key: key);
