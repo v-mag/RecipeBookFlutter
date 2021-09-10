@@ -27,13 +27,17 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         body: Padding(
           padding: const EdgeInsets.all(50.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text("Welcome", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 50.0)),
-              Text("to your recipe book app", style: TextStyle(fontSize: 25.0)),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 40.0),
+                child: Text("to your recipe book app", style: TextStyle(fontSize: 25.0)),
+              ),
               TextFormField(
                 decoration: InputDecoration(
                   labelText: "Username",
@@ -62,15 +66,21 @@ class _LoginScreenState extends State<LoginScreen> {
                   value!.isEmpty ? "Password is required" : null;
                 }
               ),
-              ElevatedButton(
-                  child: Text("Login"),
-                  onPressed: () {
-                    AuthService().login(username, password).then((value) => {
-                      if(value) {
-                        Provider.of<Profile>(context, listen: false).isAuthentificated = true
+              Padding(
+                padding: const EdgeInsets.only(top: 40, bottom: 40),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                      child: Text("Login"),
+                      onPressed: () {
+                        AuthService().login(username, password).then((value) => {
+                          if(value) {
+                            Provider.of<Profile>(context, listen: false).isAuthentificated = true
+                          }
+                        });
                       }
-                    });
-                  }
+                  ),
+                ),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,

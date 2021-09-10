@@ -31,6 +31,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         body: Center(
           child: Padding(
             padding: const EdgeInsets.all(50.0),
@@ -55,23 +56,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   obscureText: true,
                 ),
-                ElevatedButton(
-                    onPressed: () {
-                      AuthService().register(username, password).then((value) {
-                        if(value) {
-                          Navigator.pop(context);
-                        } else {
+                Padding(
+                  padding: const EdgeInsets.only(top: 40, bottom: 40),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                        onPressed: () {
+                          AuthService().register(username, password).then((value) {
+                            if(value) {
+                              Navigator.pop(context);
+                            } else {
 
-                        }
-                      });
-                    },
-                    child: Text("Register")
+                            }
+                          });
+                        },
+                        child: Text("Register")
+                    ),
+                  ),
                 ),
-                ElevatedButton(
+                ElevatedButton.icon(
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: Text("Back to Login")
+                    icon: Icon(Icons.arrow_back_ios),
+                    label: Text("Back to Login")
                 ),
               ],
             ),
